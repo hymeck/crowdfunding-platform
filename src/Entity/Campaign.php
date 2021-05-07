@@ -75,6 +75,11 @@ class Campaign
     private $tags;
 
     /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Rating", mappedBy="campaign")
+     */
+    private $rated_users;
+
+    /**
      * @ORM\ManyToOne(targetEntity=CrowdfundingUser::class, inversedBy="campaigns")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -86,6 +91,7 @@ class Campaign
         $this->news = new ArrayCollection();
         $this->bonuses = new ArrayCollection();
         $this->tags = new ArrayCollection();
+        $this->rated_users = new ArrayCollection();
     }
 
     public function getId(): ?int

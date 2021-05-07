@@ -48,10 +48,16 @@ class CrowdfundingUser implements UserInterface
      */
     private $campaigns;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Rating", mappedBy="user")
+     */
+    private $rated_campaigns;
+
     public function __construct()
     {
         $this->payments = new ArrayCollection();
         $this->campaigns = new ArrayCollection();
+        $this->rated_campaigns = new ArrayCollection();
     }
 
     public function getId(): ?int
