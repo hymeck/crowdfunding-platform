@@ -20,32 +20,38 @@ class CrowdfundingUser implements UserInterface
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private int $id;
+    private $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      */
-    private string $username;
+    private $username;
 
     /**
      * @ORM\Column(type="json")
      */
-    private array $roles = [];
+    private $roles = [];
 
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
      */
-    private string $password;
+    private $password;
 
     /**
      * @ORM\OneToMany(targetEntity=Payment::class, mappedBy="user")
      */
     private $payments;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Campaign::class, mappedBy="crowdfundingUser")
+     */
+    private $campaigns;
+
     public function __construct()
     {
         $this->payments = new ArrayCollection();
+        $this->campaigns = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -148,6 +154,36 @@ class CrowdfundingUser implements UserInterface
             // set the owning side to null (unless already changed)
             if ($payment->getUser() === $this) {
                 $payment->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Campaign[]
+     */
+    public function getCampaigns(): Collection
+    {
+        return $this->campaigns;
+    }
+
+    public function addCampaign(Campaign $campaign): self
+    {
+        if (!$this->campaigns->contains($campaign)) {
+            $this->campaigns[] = $campaign;
+            $campaign->setCrowdfundingUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCampaign(Campaign $campaign): self
+    {
+        if ($this->campaigns->removeElement($campaign)) {
+            // set the owning side to null (unless already changed)
+            if ($campaign->getCrowdfundingUser() === $this) {
+                $campaign->setCrowdfundingUser(null);
             }
         }
 
