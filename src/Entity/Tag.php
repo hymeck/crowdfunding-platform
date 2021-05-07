@@ -10,8 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=TagRepository::class)
+ * @ORM\Table(name="tags")
  */
-#[ApiResource]
 class Tag
 {
     /**
@@ -22,7 +22,7 @@ class Tag
     private $id;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string", length=50)
      */
     private $name;
 

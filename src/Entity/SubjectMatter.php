@@ -10,8 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=SubjectMatterRepository::class)
+ * @ORM\Table(name="subject_matters")
  */
-#[ApiResource]
 class SubjectMatter
 {
     /**

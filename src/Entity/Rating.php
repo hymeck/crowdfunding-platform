@@ -10,8 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=RatingRepository::class)
+ * @ORM\Table(name="ratings")
  */
-#[ApiResource]
 class Rating
 {
     /**
@@ -33,7 +33,7 @@ class Rating
     private $campaign;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\CrowdfundingUser")
+     * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(nullable=false)
      */
     private $user;
@@ -65,7 +65,7 @@ class Rating
         return $this;
     }
 
-    public function getUser(): CrowdfundingUser
+    public function getUser(): User
     {
         return $this->user;
     }

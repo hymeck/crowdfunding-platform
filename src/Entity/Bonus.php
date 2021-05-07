@@ -10,8 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=BonusRepository::class)
+ * @ORM\Table(name="bonuses")
  */
-#[ApiResource]
 class Bonus
 {
     /**

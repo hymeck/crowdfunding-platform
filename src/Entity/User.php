@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Repository\CrowdfundingUserRepository;
+use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -12,8 +12,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=CrowdfundingUserRepository::class)
+ * @ORM\Table(name="users")
  */
-class CrowdfundingUser implements UserInterface
+class User implements UserInterface
 {
     /**
      * @ORM\Id
@@ -26,6 +27,11 @@ class CrowdfundingUser implements UserInterface
      * @ORM\Column(type="string", length=180, unique=true)
      */
     private $username;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $is_deleted;
 
     /**
      * @ORM\Column(type="json")
@@ -48,16 +54,10 @@ class CrowdfundingUser implements UserInterface
      */
     private $campaigns;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Rating", mappedBy="user")
-     */
-    private $rated_campaigns;
-
     public function __construct()
     {
         $this->payments = new ArrayCollection();
         $this->campaigns = new ArrayCollection();
-        $this->rated_campaigns = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -79,6 +79,17 @@ class CrowdfundingUser implements UserInterface
     {
         $this->username = $username;
 
+        return $this;
+    }
+
+    public function getIsDeleted()
+    {
+        return $this->is_deleted;
+    }
+
+    public function setIsDeleted($is_deleted)
+    {
+        $this->is_deleted = $is_deleted;
         return $this;
     }
 
@@ -178,7 +189,7 @@ class CrowdfundingUser implements UserInterface
     {
         if (!$this->campaigns->contains($campaign)) {
             $this->campaigns[] = $campaign;
-            $campaign->setCrowdfundingUser($this);
+            $campaign->setUser($this);
         }
 
         return $this;
@@ -188,8 +199,8 @@ class CrowdfundingUser implements UserInterface
     {
         if ($this->campaigns->removeElement($campaign)) {
             // set the owning side to null (unless already changed)
-            if ($campaign->getCrowdfundingUser() === $this) {
-                $campaign->setCrowdfundingUser(null);
+            if ($campaign->getUser() === $this) {
+                $campaign->setUser(null);
             }
         }
 

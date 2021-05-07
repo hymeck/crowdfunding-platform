@@ -12,8 +12,8 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=CampaignRepository::class)
+ * @ORM\Table(name="campaigns")
  */
-#[ApiResource]
 class Campaign
 {
     /**
@@ -75,15 +75,10 @@ class Campaign
     private $tags;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Rating", mappedBy="campaign")
-     */
-    private $rated_users;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=CrowdfundingUser::class, inversedBy="campaigns")
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="campaigns")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $crowdfundingUser;
+    private $user;
 
     public function __construct()
     {
@@ -91,7 +86,6 @@ class Campaign
         $this->news = new ArrayCollection();
         $this->bonuses = new ArrayCollection();
         $this->tags = new ArrayCollection();
-        $this->rated_users = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -285,14 +279,14 @@ class Campaign
         return $this;
     }
 
-    public function getCrowdfundingUser(): ?CrowdfundingUser
+    public function getUser(): ?User
     {
-        return $this->crowdfundingUser;
+        return $this->user;
     }
 
-    public function setCrowdfundingUser(?CrowdfundingUser $crowdfundingUser): self
+    public function setUser(?User $user): self
     {
-        $this->crowdfundingUser = $crowdfundingUser;
+        $this->user = $user;
 
         return $this;
     }

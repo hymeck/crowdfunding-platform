@@ -10,8 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=PaymentRepository::class)
+ * @ORM\Table(name="payments")
  */
-#[ApiResource]
 class Payment
 {
     /**
@@ -27,7 +27,7 @@ class Payment
     private $money_amount;
 
     /**
-     * @ORM\ManyToOne(targetEntity=CrowdfundingUser::class, inversedBy="payments")
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="payments")
      * @ORM\JoinColumn(nullable=false)
      */
     private $user;
@@ -55,12 +55,12 @@ class Payment
         return $this;
     }
 
-    public function getUser(): ?CrowdfundingUser
+    public function getUser(): ?User
     {
         return $this->user;
     }
 
-    public function setUser(?CrowdfundingUser $user): self
+    public function setUser(?User $user): self
     {
         $this->user = $user;
 
