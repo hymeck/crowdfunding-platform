@@ -8,11 +8,13 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * @ORM\Entity(repositoryClass=CrowdfundingUserRepository::class)
+ * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\Table(name="users")
+ * @UniqueEntity(fields={"username"}, message="There is already an account with this username")
  */
 class User implements UserInterface
 {
@@ -29,9 +31,9 @@ class User implements UserInterface
     private $username;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", options={"default"= 0})
      */
-    private $is_deleted;
+    private $is_deleted = false;
 
     /**
      * @ORM\Column(type="json")
