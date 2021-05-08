@@ -47,6 +47,11 @@ class User implements UserInterface
     private $password;
 
     /**
+     * @ORM\Column(type="datetimetz")
+     */
+    private $registered_at;
+
+    /**
      * @ORM\OneToMany(targetEntity=Payment::class, mappedBy="user")
      */
     private $payments;
@@ -126,6 +131,17 @@ class User implements UserInterface
     {
         $this->password = $password;
 
+        return $this;
+    }
+
+    public function getRegisteredAt()
+    {
+        return $this->registered_at;
+    }
+
+    public function setRegisteredAt($registered_at)
+    {
+        $this->registered_at = $registered_at;
         return $this;
     }
 

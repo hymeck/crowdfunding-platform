@@ -30,11 +30,12 @@ class RegistrationController extends AbstractController
 
             $entityManager = $this->getDoctrine()->getManager();
             $user->setRoles(['ROLE_USER']);
+            $user->setRegisteredAt(date_create());
             $entityManager->persist($user);
             $entityManager->flush();
             // do anything else you need here, like send an email
 
-            return $this->redirectToRoute('user');
+            return $this->redirectToRoute('user_profile');
         }
 
         return $this->render('registration/register.html.twig', [

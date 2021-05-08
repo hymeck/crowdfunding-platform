@@ -1,14 +1,14 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello UserController!{% endblock %}
+{% block title %}user profile{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+    <h1>user profile</h1>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-</div>
+    {{ form_start(userForm) }}<br/>
+    {{ form_row(userForm.username) }}<br/>
+    {{ form_row(userForm.registered_at)}}<br/>
+    <button type="submit" class="btn">edit</button><br/>
+    {{ form_end(userForm) }}
+    <h2> todo: add links to bonuses page, campaigns page</h2>
 {% endblock %}
