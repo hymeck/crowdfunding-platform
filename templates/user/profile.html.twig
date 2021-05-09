@@ -10,5 +10,6 @@
     {{ form_row(userForm.registered_at)}}<br/>
     <button type="submit" class="btn">edit</button><br/>
     {{ form_end(userForm) }}
-    <h2> todo: add links to bonuses page, campaigns page</h2>
+    <a href="{{ path('user_bonuses') }}">bonuses</a><br/>
+    <a href="{{ path('user_campaigns') }}">campaigns</a>
 {% endblock %}

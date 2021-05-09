@@ -27,6 +27,11 @@ class Payment
     private $money_amount;
 
     /**
+     * @ORM\Column(type="datetimetz")
+     */
+    private $made_at;
+
+    /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="payments")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -52,6 +57,18 @@ class Payment
     {
         $this->money_amount = $money_amount;
 
+        return $this;
+    }
+
+
+    public function getMadeAt()
+    {
+        return $this->made_at;
+    }
+
+    public function setMadeAt($made_at)
+    {
+        $this->made_at = $made_at;
         return $this;
     }
 

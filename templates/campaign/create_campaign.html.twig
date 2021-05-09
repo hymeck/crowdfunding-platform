@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}campaign creation{% endblock %}
+
+{% block body %}
+    <h1>campaign creation</h1>
+    {{ form_start(campaignForm) }}
+    {{ form_row(campaignForm.name) }}
+    {{ form_row(campaignForm.description) }}
+    {{ form_row(campaignForm.subjectMatter) }}
+    {{ form_row(campaignForm.moneyAmount) }}
+    {{ form_row(campaignForm.startedAt) }}
+    {{ form_row(campaignForm.finishedAt) }}
+    {# todo: add subject matter and tags #}
+    <button type="submit">create</button>
+    {{ form_end(campaignForm) }}
+{% endblock %}

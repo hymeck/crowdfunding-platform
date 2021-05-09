@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}bonuses of {{ username }} {% endblock %}
+
+{% block body %}
+    <h1>bonuses of {{ username }}</h1>
+    <a href="{{ path('user_profile') }}">profile</a>
+    {% for bonus in bonuses %}
+    {% endfor %}
+{% endblock %}

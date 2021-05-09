@@ -32,6 +32,11 @@ class News
     private $body;
 
     /**
+     * @ORM\Column(type="datetimetz")
+     */
+    private $posted_at;
+
+    /**
      * @ORM\ManyToOne(targetEntity=Campaign::class, inversedBy="news")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -63,6 +68,17 @@ class News
     {
         $this->body = $body;
 
+        return $this;
+    }
+
+    public function getPostedAt()
+    {
+        return $this->posted_at;
+    }
+
+    public function setPostedAt($posted_at)
+    {
+        $this->posted_at = $posted_at;
         return $this;
     }
 

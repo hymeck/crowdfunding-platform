@@ -49,6 +49,11 @@ class Campaign
     private $finished_at;
 
     /**
+     * @ORM\Column(type="datetimetz")
+     */
+    private $updated_at;
+
+    /**
      * @ORM\ManyToOne(targetEntity=SubjectMatter::class)
      * @ORM\JoinColumn(nullable=false)
      */
@@ -150,6 +155,17 @@ class Campaign
     {
         $this->finished_at = $finished_at;
 
+        return $this;
+    }
+
+    public function getUpdatedAt()
+    {
+        return $this->updated_at;
+    }
+
+    public function setUpdatedAt($updated_at)
+    {
+        $this->updated_at = $updated_at;
         return $this;
     }
 

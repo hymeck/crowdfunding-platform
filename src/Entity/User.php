@@ -57,14 +57,20 @@ class User implements UserInterface
     private $payments;
 
     /**
-     * @ORM\OneToMany(targetEntity=Campaign::class, mappedBy="crowdfundingUser")
+     * @ORM\OneToMany(targetEntity=Campaign::class, mappedBy="user")
      */
     private $campaigns;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\UserBonus", mappedBy="user")
+     */
+    private $bonuses;
 
     public function __construct()
     {
         $this->payments = new ArrayCollection();
         $this->campaigns = new ArrayCollection();
+        $this->bonuses = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -223,5 +229,10 @@ class User implements UserInterface
         }
 
         return $this;
+    }
+
+    public function getBonuses(): Collection
+    {
+        return $this->bonuses;
     }
 }

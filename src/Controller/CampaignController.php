@@ -8,7 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class CampaignController extends AbstractController
 {
-    #[Route('/campaign', name: 'campaign')]
+    #[Route('/add_campaign', name: 'campaign')]
     public function index(): Response
     {
         return $this->render('campaign/index.html.twig', [

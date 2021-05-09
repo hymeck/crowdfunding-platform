@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}campaigns of {{ username }}{% endblock %}
+
+{% block body %}
+    <h1>campaigns of {{ username }}</h1>
+    <a href="{{ path('user_profile') }}">profile</a><br/>
+    <a href="{{ path('user_create_campaign') }}">add campaign</a><br/>
+    {% for c in campaigns %}
+        <h2>{{ c.name }}</h2><br/>
+        <li>description: {{ c.description }}</li><br/>
+        <li>money amount: {{ c.moneyAmount }}</li><br/>
+        <li>subject matter: {{ c.subjectMatter.name }}</li><br/>
+        <li>started at: {{ c.startedAt.format('d M Y') }}</li><br/>
+        <li>finished at: {{ c.finishedAt.format('d M Y') }}</li><br/>
+        <li>last updated at: {{ c.updatedAt.format('d M Y') }}</li><br/>
+        {% for t in c.tags %}
+            <p>{{ t.name }}</p>
+        {% endfor %}
+    {% endfor %}
+{% endblock %}

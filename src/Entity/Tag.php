@@ -26,12 +26,12 @@ class Tag
      */
     private $name;
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function getName(): ?int
+    public function getName(): string
     {
         return $this->name;
     }

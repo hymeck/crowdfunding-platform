@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}homepage{% endblock %}
+
+{% block body %}
+    <h1>homepage</h1>
+    {% if app.user %}
+        <div>
+            You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
+        </div>
+    {% endif %}
+
+    <a href="{{ path('app_login') }}"></a>
+
+    <h2>tags</h2>
+    {% for t in tags %}
+        <p>{{ t.name }}</p>
+    {% endfor %}
+
+    <h2>last updated campaigns</h2>
+
+{#    todo: iterate over last updated campaigns#}
+
+    <h2>top rated campaigns</h2>
+
+    {#    todo: iterate over top rated campaigns#}
+
+{% endblock %}
