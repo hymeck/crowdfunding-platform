@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} adding bonus {% endblock %}
+
+{% block body %}
+    <h1>adding bonus</h1>
+    {{ form_start(bonusForm) }}
+    {{ form_row(bonusForm.name) }}
+    {{ form_row(bonusForm.description) }}
+    {{ form_row(bonusForm.price) }}
+    <button type="submit">add</button>
+    {{ form_end(bonusForm) }}
+{% endblock %}

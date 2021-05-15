@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\Bonus;
 use App\Entity\Campaign;
+use App\Form\BonusFormType;
 use App\Form\CampaignCreationFormType;
 use App\Form\UserDataFormType;
-use App\Repository\SubjectMatterRepository;
+use App\Repository\CampaignRepository;
 use App\Repository\TagRepository;
 use App\Repository\UserRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -23,18 +25,21 @@ use Symfony\Component\Security\Core\Security;
  */
 class UserController extends AbstractController
 {
-    private $security;
+    private Security $security;
     private UserRepository $userRepository;
     private TagRepository $tagRepository;
+    private CampaignRepository $campaignRepository;
 
     public function __construct(
         Security $security,
         UserRepository $userRepository,
-        TagRepository $tagRepository)
+        TagRepository $tagRepository,
+        CampaignRepository $campaignRepository)
     {
         $this->security = $security;
         $this->userRepository = $userRepository;
         $this->tagRepository = $tagRepository;
+        $this->campaignRepository = $campaignRepository;
     }
 
     #[Route('/profile', name: 'user_profile')]
@@ -67,7 +72,7 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('my_bonuses', name: 'user_bonuses')]
+    #[Route('/my_bonuses', name: 'user_bonuses')]
     public function bonuses() : Response
     {
         $user =$this
@@ -81,7 +86,7 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('my_campaigns', name: 'user_campaigns')]
+    #[Route('/my_campaigns', name: 'user_campaigns')]
     public function campaigns() : Response
     {
         $user =$this
@@ -96,7 +101,7 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('create_campaign', name: 'user_create_campaign')]
+    #[Route('/create_campaign', name: 'user_create_campaign')]
     public function create_campaign(Request $request) : Response
     {
         $user =$this
@@ -125,5 +130,37 @@ class UserController extends AbstractController
             'campaignForm' => $form->createView(),
             'tags' => $tags
         ]);
+    }
+
+    #[Route('/my_campaigns/add_bonus', name: 'user_add_bonus')]
+    public function add_bonus(Request $request)
+    {
+        $id = $_GET['id'];
+
+        $bonus = new Bonus();
+        $form = $this->createForm(BonusFormType::class, $bonus);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $now = date_create();
+            $bonus->setAddedAt($now);
+
+            $campaign = $this->campaignRepository->find($id);
+            $campaign->addBonus($bonus);
+            $campaign->setUpdatedAt($now);
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($bonus);
+            $entityManager->persist($campaign);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('user_profile');
+        }
+
+        return $this->render('bonus/add_bonus.html.twig', [
+                'bonusForm' => $form->createView()
+            ]
+        );
     }
 }

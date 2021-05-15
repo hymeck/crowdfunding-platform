@@ -39,6 +39,11 @@ class Campaign
     private $money_amount;
 
     /**
+     * @ORM\Column(type="integer", options={"default"= 0})
+     */
+    private $current_money_amount;
+
+    /**
      * @ORM\Column(type="datetimetz")
      */
     private $started_at;
@@ -85,12 +90,18 @@ class Campaign
      */
     private $user;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="campaign")
+     */
+    private $comments;
+
     public function __construct()
     {
         $this->images = new ArrayCollection();
         $this->news = new ArrayCollection();
         $this->bonuses = new ArrayCollection();
         $this->tags = new ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -131,6 +142,17 @@ class Campaign
     {
         $this->money_amount = $money_amount;
 
+        return $this;
+    }
+
+    public function getCurrentMoneyAmount()
+    {
+        return $this->current_money_amount;
+    }
+
+    public function setCurrentMoneyAmount($current_money_amount)
+    {
+        $this->current_money_amount = $current_money_amount;
         return $this;
     }
 
@@ -303,6 +325,36 @@ class Campaign
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Comment[]
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): self
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments[] = $comment;
+            $comment->setCampaign($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): self
+    {
+        if ($this->comments->removeElement($comment)) {
+            // set the owning side to null (unless already changed)
+            if ($comment->getCampaign() === $this) {
+                $comment->setCampaign(null);
+            }
+        }
 
         return $this;
     }

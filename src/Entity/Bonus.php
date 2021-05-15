@@ -39,7 +39,12 @@ class Bonus
     /**
      * @ORM\Column(type="boolean")
      */
-    private $is_deleted;
+    private $is_deleted = false;
+
+    /**
+     * @ORM\Column(type="datetimetz")
+     */
+    private $added_at;
 
     /**
      * @ORM\ManyToOne(targetEntity=Campaign::class, inversedBy="bonuses")
@@ -97,6 +102,17 @@ class Bonus
     {
         $this->is_deleted = $is_deleted;
 
+        return $this;
+    }
+
+    public function getAddedAt()
+    {
+        return $this->added_at;
+    }
+
+    public function setAddedAt($added_at)
+    {
+        $this->added_at = $added_at;
         return $this;
     }
 

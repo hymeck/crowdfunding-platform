@@ -10,6 +10,7 @@
         <h2>{{ c.name }}</h2><br/>
         <li>description: {{ c.description }}</li><br/>
         <li>money amount: {{ c.moneyAmount }}</li><br/>
+        <li>current money amount: {{ c.currentMoneyAmount }}</li><br/>
         <li>subject matter: {{ c.subjectMatter.name }}</li><br/>
         <li>started at: {{ c.startedAt.format('d M Y') }}</li><br/>
         <li>finished at: {{ c.finishedAt.format('d M Y') }}</li><br/>
@@ -17,5 +18,6 @@
         {% for t in c.tags %}
             <p>{{ t.name }}</p>
         {% endfor %}
+        <a href="{{ path('user_add_bonus', {id: c.id}) }}">add bonus</a><br/>
     {% endfor %}
 {% endblock %}

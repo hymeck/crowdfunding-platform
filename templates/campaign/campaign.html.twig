@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} campaign {{ campaign.id}} {% endblock %}
+
+{% block body %}
+    <h1>campaign {{ campaign.id }}</h1>
+    <h2>{{ campaign.name }}</h2>
+    <p>description: {{ campaign.description }}</p>
+    <p>money amount: {{ campaign.moneyAmount }}</p>
+    <p>current money amount: {{ campaign.currentMoneyAmount }}</p>
+    <p>started at: {{ campaign.startedAt.format('d M Y') }}</p>
+    <p>finished at: {{ campaign.finishedAt.format('d M Y') }}</p>
+    <p>updated at: {{ campaign.updatedAt.format('d M Y') }}</p>
+    <p>subject matter: {{ campaign.subjectMatter.name }}</p>
+
+    <h3>tags:</h3>
+    {% for t in campaign.tags %}
+        <li>{{ t.name }}</li>
+    {% endfor %}
+
+    <h3>bonuses:</h3>
+    {% for b in bonuses %}
+        <p>name: {{ b.name }}</p>
+        <p>description: {{ b.description }}</p>
+        <p>price: {{ b.price }}</p>
+    {% endfor %}
+
+    <form method="post" action="{{ path('app_donate_donate', {id: campaign.id, uid: app.user.id}) }}">
+        <input type="hidden" id="{{ campaign.id }}" value="{{ campaign.id }}"/>
+        <label><input type="number" id="money" placeholder="money amount to donate"/></label>
+        <button type="submit">donate</button>
+    </form>
+{#    todo: add image galery#}
+{#    todo: add news#}
+{#    todo: add rating#}
+
+{% endblock %}
