@@ -6,12 +6,17 @@ namespace App\Controller;
 
 use App\Entity\Bonus;
 use App\Entity\Campaign;
+use App\Entity\News;
 use App\Form\BonusFormType;
 use App\Form\CampaignCreationFormType;
+use App\Form\NewsFormType;
 use App\Form\UserDataFormType;
 use App\Repository\CampaignRepository;
+use App\Repository\CommentRepository;
+use App\Repository\NewsRepository;
 use App\Repository\TagRepository;
 use App\Repository\UserRepository;
+use phpDocumentor\Reflection\Types\This;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,17 +34,23 @@ class UserController extends AbstractController
     private UserRepository $userRepository;
     private TagRepository $tagRepository;
     private CampaignRepository $campaignRepository;
+    private NewsRepository $newsRepository;
+    private CommentRepository $commentRepository;
 
     public function __construct(
         Security $security,
         UserRepository $userRepository,
         TagRepository $tagRepository,
-        CampaignRepository $campaignRepository)
+        CampaignRepository $campaignRepository,
+        NewsRepository $newsRepository,
+        CommentRepository $commentRepository)
     {
         $this->security = $security;
         $this->userRepository = $userRepository;
         $this->tagRepository = $tagRepository;
         $this->campaignRepository = $campaignRepository;
+        $this->newsRepository = $newsRepository;
+        $this->commentRepository = $commentRepository;
     }
 
     #[Route('/profile', name: 'user_profile')]
@@ -133,7 +144,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/my_campaigns/add_bonus', name: 'user_add_bonus')]
-    public function add_bonus(Request $request)
+    public function add_bonus(Request $request) : Response
     {
         $id = $_GET['id'];
 
@@ -163,4 +174,82 @@ class UserController extends AbstractController
             ]
         );
     }
+
+    #[Route('/my_campaigns/add_news', name: 'user_add_news')]
+    public function add_news(Request $request) : Response
+    {
+        $id = $_GET['id'];
+
+        $news = new News();
+        $form = $this->createForm(NewsFormType::class, data: $news);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $now = date_create();
+            $news->setPostedAt($now);
+
+            $campaign = $this->campaignRepository->find($id);
+            $campaign->addNews($news);
+            $campaign->setUpdatedAt($now);
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($news);
+            $entityManager->persist($campaign);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('user_profile');
+        }
+
+        return $this->render('news/add_news.html.twig', [
+                'newsForm' => $form->createView()
+            ]
+        );
+    }
+
+    #[Route('my_campaigns/{id}/news', name: 'user_campaign_news_list')]
+    public function campaign_news_list(int $id) : Response
+    {
+        $user =$this
+            ->userRepository->findOneBy(['username' => $this->security->getUser()->getUsername()]);
+
+        $campaign = $this->campaignRepository->findOneBy(['user' => $user->getId(), 'id' => $id]);
+
+        if ($campaign == null)
+            return $this->createNotFoundException('no campaign');
+
+        $news_list = $this->newsRepository->findBy(['campaign' => $id]);
+
+        return $this->render('campaign/news.html.twig',[
+            'news' => $news_list
+        ]);
+    }
+
+    #[Route('my_campaigns/{cid}/news/{nid}', name: 'user_campaign_news')]
+    public function campaign_news(int $cid, int $nid) : Response
+    {
+        $user =$this
+            ->userRepository->findOneBy(['username' => $this->security->getUser()->getUsername()]);
+
+        $campaign = $this->campaignRepository->findOneBy(['user' => $user->getId(), 'id' => $cid]);
+
+        if ($campaign == null)
+            return $this->createNotFoundException('no campaign');
+
+        $news = $this->newsRepository->findOneBy(['campaign' => $cid, 'id' => $nid]);
+
+        if ($news == null)
+            return $this->createNotFoundException('no news');
+
+        return $this->render('news/news.html.twig',[
+            'news' => $news
+        ]);
+    }
+
+
+//    #[Route('my_campaigns/{cid}/news/{nid}')]
+//    public function edit_news() : Response
+//    {
+//
+//    }
 }

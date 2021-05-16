@@ -31,12 +31,12 @@ class Comment
     /**
      * @ORM\Column(type="integer")
      */
-    private $likes_count;
+    private $likes_count = 0;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private $dislikes_count;
+    private $dislikes_count = 0;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class)

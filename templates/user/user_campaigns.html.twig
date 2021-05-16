@@ -19,5 +19,6 @@
             <p>{{ t.name }}</p>
         {% endfor %}
         <a href="{{ path('user_add_bonus', {id: c.id}) }}">add bonus</a><br/>
+        <a href="{{ path('user_add_news', {id: c.id}) }}">add news</a><br/>
     {% endfor %}
 {% endblock %}

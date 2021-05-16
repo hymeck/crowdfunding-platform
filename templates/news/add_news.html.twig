@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} adding news {% endblock %}
+
+{% block body %}
+    <h1>adding news</h1>
+    {{ form_start(newsForm) }}
+    {{ form_row(newsForm.header) }}
+    {{ form_row(newsForm.body) }}
+    <button type="submit">add</button>
+    {{ form_end(newsForm) }}
+{% endblock %}

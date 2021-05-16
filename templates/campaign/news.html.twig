@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} {{ app.user.username}} news {% endblock %}
+
+{% block body %}
+    <h1>news:</h1>
+    {% for n in news %}
+        <a href="{{ path('user_campaign_news', {'cid': n.campaign.id, 'nid': n.id}) }}">{{ n.header }}</a><br/>
+    {% endfor %}
+{% endblock %}

@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %} campaign {{ campaign.id}} {% endblock %}
+{% block title %} campaign '{{ campaign.name}}' {% endblock %}
 
 {% block body %}
     <h1>campaign {{ campaign.id }}</h1>
@@ -30,8 +30,32 @@
         <label><input type="number" id="money" placeholder="money amount to donate"/></label>
         <button type="submit">donate</button>
     </form>
+
+    <a href="{{ path('user_campaign_news_list', {id: campaign.id}) }}">news</a>
+
 {#    todo: add image galery#}
-{#    todo: add news#}
 {#    todo: add rating#}
+
+    {% if app.user %}
+{#        {{ form_start(commentForm, {'action': path('comment_campaign')}) }}#}
+{#        {{ form_row(commentForm.comment) }}#}
+{#        <button type="submit">comment</button>#}
+{#        {{ form_end(commentForm) }}#}
+        <form method="post" action="{{ path('comment_campaign', {uid: app.user.id, cid: campaign.id})}}">
+            <label title="comment">
+                <input type="text" placeholder="comment" id="comment" name="_comment">
+            </label>
+            <button type="submit">comment</button>
+        </form>
+    {% endif %}
+
+    <h3>comments:</h3>
+    {% for c in comments %}
+        <p>{{ c.body }}</p>
+        <li>{{ c.postedAt.format('d M Y h:m:s') }}</li>
+        <li>{{ c.user.username }}</li>
+        <li>likes: {{ c.likesCount }}</li>
+        <li>dislikes: {{ c.dislikesCount }}</li>
+    {% endfor %}
 
 {% endblock %}
