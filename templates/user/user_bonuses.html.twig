@@ -5,6 +5,10 @@
 {% block body %}
     <h1>bonuses of {{ username }}</h1>
     <a href="{{ path('user_profile') }}">profile</a>
-    {% for bonus in bonuses %}
+    {% for b in bonuses %}
+        <h2>{{ b.bonus.name }}</h2>
+        <p>cost: {{ b.bonus.price }}</p>
+        <p>description: {{ b.bonus.description }}</p>
+        <p>made at payment: {{ b.payment.madeAt.format('d M Y') }}</p>
     {% endfor %}
 {% endblock %}

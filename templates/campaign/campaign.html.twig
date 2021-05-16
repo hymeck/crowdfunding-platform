@@ -25,9 +25,9 @@
         <p>price: {{ b.price }}</p>
     {% endfor %}
 
-    <form method="post" action="{{ path('app_donate_donate', {id: campaign.id, uid: app.user.id}) }}">
+    <form method="post" action="{{ path('app_donate_donate', {cid: campaign.id, uid: app.user.id}) }}">
         <input type="hidden" id="{{ campaign.id }}" value="{{ campaign.id }}"/>
-        <label><input type="number" id="money" placeholder="money amount to donate"/></label>
+        <label><input type="number" id="money" placeholder="money amount to donate" name="_money"/></label>
         <button type="submit">donate</button>
     </form>
 

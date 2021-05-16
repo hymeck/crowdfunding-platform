@@ -56,23 +56,23 @@ class UserBonus
         return $this;
     }
 
-    public function getUser()
+    public function getUser(): User
     {
         return $this->user;
     }
 
-    public function setUser($user)
+    public function setUser($user) : self
     {
         $this->user = $user;
         return $this;
     }
 
-    public function getBonus()
+    public function getBonus() : Bonus
     {
         return $this->bonus;
     }
 
-    public function setBonus($bonus)
+    public function setBonus($bonus) : self
     {
         $this->bonus = $bonus;
         return $this;

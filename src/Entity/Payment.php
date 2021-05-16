@@ -66,7 +66,7 @@ class Payment
         return $this->made_at;
     }
 
-    public function setMadeAt($made_at)
+    public function setMadeAt($made_at) : self
     {
         $this->made_at = $made_at;
         return $this;

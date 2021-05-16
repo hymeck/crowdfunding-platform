@@ -15,8 +15,8 @@ use App\Repository\CampaignRepository;
 use App\Repository\CommentRepository;
 use App\Repository\NewsRepository;
 use App\Repository\TagRepository;
+use App\Repository\UserBonusRepository;
 use App\Repository\UserRepository;
-use phpDocumentor\Reflection\Types\This;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -36,6 +36,7 @@ class UserController extends AbstractController
     private CampaignRepository $campaignRepository;
     private NewsRepository $newsRepository;
     private CommentRepository $commentRepository;
+    private UserBonusRepository $userBonusRepository;
 
     public function __construct(
         Security $security,
@@ -43,7 +44,8 @@ class UserController extends AbstractController
         TagRepository $tagRepository,
         CampaignRepository $campaignRepository,
         NewsRepository $newsRepository,
-        CommentRepository $commentRepository)
+        CommentRepository $commentRepository,
+        UserBonusRepository $bonusRepository)
     {
         $this->security = $security;
         $this->userRepository = $userRepository;
@@ -51,6 +53,7 @@ class UserController extends AbstractController
         $this->campaignRepository = $campaignRepository;
         $this->newsRepository = $newsRepository;
         $this->commentRepository = $commentRepository;
+        $this->userBonusRepository = $bonusRepository;
     }
 
     #[Route('/profile', name: 'user_profile')]
@@ -89,7 +92,7 @@ class UserController extends AbstractController
         $user =$this
             ->userRepository->findOneBy(['username' => $this->security->getUser()->getUsername()]);
 
-        $bonuses = $user->getBonuses();
+        $bonuses = $this->userBonusRepository->findBy(['user' => $user->getId()]);
 
         return $this->render('user/user_bonuses.html.twig',[
             'username' => $user->getUsername(),
